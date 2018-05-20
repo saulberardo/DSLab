@@ -20,7 +20,7 @@ Accuracy | Paper | Model | URL |
 91.80 | CN+Char+CoVe | [McCann et al., 2017]  | https://arxiv.org/pdf/1708.00107.pdf
 95.40 | ULMFit       | [Howard & Ruder, 2018] | https://arxiv.org/pdf/1801.06146.pdf
 
-# Comments
+## Comments
 * In [McCAnn et al, 2017] there are references to other paper with accuracies as high as 94.1.
 
 * I don't know if ther results in the Benchmarks above are totaly comparable due to possible
