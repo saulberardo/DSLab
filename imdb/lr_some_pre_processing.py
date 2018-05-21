@@ -30,7 +30,7 @@ NUM_WORDS = 1000
 INDEX_FROM = 3   # word index offset
 
 # Get train and test data
-(train_x, train_y), (test_x ,test_y ) = keras.datasets.imdb.load_data(num_words=NUM_WORDS, index_from=INDEX_FROM)
+(train_x, train_y), (test_x, test_y) = keras.datasets.imdb.load_data(num_words=NUM_WORDS, index_from=INDEX_FROM)
 
 
 # Convert lists of IDs to strigs (so we can create BoW representations with sklearn)
@@ -81,7 +81,7 @@ def indices_to_words(indices_text):
     id_to_word = {value:key for key,value in word_to_id.items()}
     
     # Print the text of one training sample
-    return ' '.join(id_to_word[id] for id in indices_text )
+    return ' '.join(id_to_word[id] for id in indices_text)
     
 print(indices_to_words(train_x[0]))
 
