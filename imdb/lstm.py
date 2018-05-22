@@ -93,12 +93,12 @@ for i_epoch in range(0, num_epochs):
         out, (h_t, c_t) = lstm(sentence.view(len(sentence), 1, -1), (h_t, c_t))
         
         probs = softmax(linear(h_t.squeeze()))
-        batch_probs.append(probs)
+        batch_probs.append(probs.tolist())
         
         
         
         
-    train_loss = loss(batch_probs, train_y)
+    train_loss = loss(T(batch_probs), train_y[0:100])
     print(train_loss)
 
 
