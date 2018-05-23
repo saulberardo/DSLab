@@ -14,12 +14,19 @@ from torch.autograd import Variable as V
 from torch.nn import CrossEntropyLoss
 from torch import nn
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 
+NUM_WORDS = 10
 
+num_epochs = 2
 
-# only use top 1000 words ( I don't know why, but it uses always 10 less words than specified here)
-NUM_WORDS = 100
+NUM_SAMPLES = 100
+
+input_size = NUM_WORDS
+n_hidden = 100
+n_out = 2
+
 
 # Word indexes start at 3 (so we can set 0, 1, and 2 with special tags)
 INDEX_FROM = 3   # word index offset
@@ -41,9 +48,7 @@ def word_idx_to_onehot(word_idx):
 
 
 
-input_size = NUM_WORDS
-n_hidden = 10
-n_out = 2
+
 
 #
 lstm = nn.LSTM(NUM_WORDS, n_hidden)
@@ -67,43 +72,57 @@ out, (h_t, c_t) = lstm(sentence, (h_t, c_t))
 
 loss = CrossEntropyLoss()
 
-lr = 0.1
-num_epochs = 10
+lr = 0.3
+
+
+train_accs = []
+train_losses = []
+
+print('Converting train sentences to OneHot')
+sentences = []
+for x in tqdm(train_x[0:NUM_SAMPLES]):
+    sentences.append(T(word_idx_sequence_to_onehot_sequence(x)))
 
 # For ech apoch
 for i_epoch in range(0, num_epochs):
     
-    print(f'# Epoch {i_epoch}')
+    print(f'# Epoch {i_epoch}', flush=True)
         
     # Clasification probs for each sentences
     batch_probs = []
     
+    batch_preds = []
+    
     train_loss = 0
     
     # for each sentence in training set
-    for j, x in enumerate(train_x[0:100]):
+    for j, sentence in enumerate(tqdm(sentences)):
 
-        #print(f'Sentence {j}/{len(train_x)}')
-        
-        #  
-        sentence = T(word_idx_sequence_to_onehot_sequence(x))
-        
+        #print(f'Sentence {j}/{NUM_SAMPLES}')
+
         # initialize the hidden and cell states
-        h_t = torch.zeros(1, 1, n_hidden).view(1,1,10)
-        c_t = torch.zeros(1, 1, n_hidden).view(1,1,10)
+        #h_t = torch.zeros(1, 1, n_hidden).view(1,1,n_hidden)
+        #c_t = torch.zeros(1, 1, n_hidden).view(1,1,n_hidden)
         
-        out, (h_t, c_t) = lstm(sentence.view(len(sentence), 1, -1), (h_t, c_t))
+        out, (h_t, c_t) = lstm(sentence.view(len(sentence), 1, -1))
         
         probs = softmax(linear(h_t.squeeze()))
         #batch_probs.append(probs.tolist())
         
         train_loss += loss(probs.view([1,2]), train_y[j:j+1])
         
+        _, train_predicted_idx = probs.max(0)
         
-    print(train_loss)    
+        batch_preds.append(train_predicted_idx)
+        
+        
+    train_loss = train_loss / NUM_SAMPLES        
+        
+    train_losses.append(train_loss)
     
     lstm.zero_grad()
     linear.zero_grad()
+    
     train_loss.backward()
     
 
@@ -118,11 +137,18 @@ for i_epoch in range(0, num_epochs):
     
     #train_loss = loss(T(batch_probs), train_y[0:100])
     #print(train_loss)
+    
+    # Compute train set accuracy 
+    train_acc = accuracy_score(train_y[0:NUM_SAMPLES].data.numpy(), batch_preds)
+    train_accs.append(train_acc)
+    train_losses.append(train_loss.item())
+    
+    print(train_loss.item(), train_acc)    
+    
 
-
     
-    
-    
+plt.plot(train_losses, label='Train Loss', color='blue')    
+plt.show()
     
     
     
