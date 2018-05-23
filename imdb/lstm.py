@@ -67,8 +67,8 @@ out, (h_t, c_t) = lstm(sentence, (h_t, c_t))
 
 loss = CrossEntropyLoss()
 
-lr = 3.
-num_epochs = 5
+lr = 0.1
+num_epochs = 10
 
 # For ech apoch
 for i_epoch in range(0, num_epochs):
@@ -78,10 +78,12 @@ for i_epoch in range(0, num_epochs):
     # Clasification probs for each sentences
     batch_probs = []
     
+    train_loss = 0
+    
     # for each sentence in training set
     for j, x in enumerate(train_x[0:100]):
 
-        print(f'Sentence {j}/{len(train_x)}')
+        #print(f'Sentence {j}/{len(train_x)}')
         
         #  
         sentence = T(word_idx_sequence_to_onehot_sequence(x))
@@ -93,13 +95,29 @@ for i_epoch in range(0, num_epochs):
         out, (h_t, c_t) = lstm(sentence.view(len(sentence), 1, -1), (h_t, c_t))
         
         probs = softmax(linear(h_t.squeeze()))
-        batch_probs.append(probs.tolist())
+        #batch_probs.append(probs.tolist())
+        
+        train_loss += loss(probs.view([1,2]), train_y[j:j+1])
         
         
+    print(train_loss)    
+    
+    lstm.zero_grad()
+    linear.zero_grad()
+    train_loss.backward()
+    
+
+    
+    # Update parameters
+    for param in lstm.parameters():
+        param.data -= lr * param.grad.data
         
-        
-    train_loss = loss(T(batch_probs), train_y[0:100])
-    print(train_loss)
+    # Update parameters
+    for param in linear.parameters():
+        param.data -= lr * param.grad.data
+    
+    #train_loss = loss(T(batch_probs), train_y[0:100])
+    #print(train_loss)
 
 
     

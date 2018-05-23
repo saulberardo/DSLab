@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt
 
 
 # only use top 1000 words ( I don't know why, but it uses always 10 less words than specified here)
-NUM_WORDS = 5000
+NUM_WORDS = 100
 
 # Word indexes start at 3 (so we can set 0, 1, and 2 with special tags)
 INDEX_FROM = 3   # word index offset
@@ -89,7 +89,7 @@ train_losses = []
 test_losses = []
 
 lr = 3.
-num_epochs = 200
+num_epochs = 50
 for i_epoch in range(0, num_epochs):
     
     probs = model(train_x_bow)
