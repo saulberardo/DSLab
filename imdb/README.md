@@ -9,8 +9,8 @@
 ## Source
 * Year: 2011
 * Authors: Andrew L. Maas et al.
-* Paper: Learning Word Vectors for Sentiment Analysis
-* URL: https://ai.stanford.edu/~ang/papers/acl11-WordVectorsSentimentAnalysis.pdf
+* Paper: [Learning Word Vectors for Sentiment Analysis](https://ai.stanford.edu/~ang/papers/acl11-WordVectorsSentimentAnalysis.pdf)
+* URL: http://ai.stanford.edu/~amaas//data/sentiment/
 
 
 ## Benchmarks:
@@ -23,9 +23,9 @@ Accuracy | Paper | Model | URL |
 ## Comments
 * In [McCAnn et al, 2017] there are references to other paper with accuracies as high as 94.1.
 
-* I don't know if ther results in the Benchmarks above are totaly comparable due to possible
+* I don't know if the results in the Benchmarks above are totaly comparable due to possible
 differences in test setup.
 
 * In Kaggle's IMDB toy competition LB, there are accuracies as high as 0.99259, but
-possibly they were achieved with emsembles, not single models as in the Benchmarks
+possibly they were achieved with emsembles, not single models as in the Benchmarks above
 (URL: https://www.kaggle.com/c/word2vec-nlp-tutorial/leaderboard).
