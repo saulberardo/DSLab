@@ -25,7 +25,7 @@ class Imdb:
         # Folder containing the original dataset
         aclImdb_folder = os.path.join(datasets_folder, 'aclImdb', 'original')
         
-        # File where the odownloaded aclImdb_v1.tar.gz will be saved
+        # File where the downloaded aclImdb_v1.tar.gz will be saved
         download_output = os.path.join(aclImdb_folder, 'aclImdb_v1.tar.gz')        
         
         

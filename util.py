@@ -6,6 +6,7 @@ Usefull methods to use across the project.
 import os
 import requests
 import tarfile
+import zipfile
 import math
 import tqdm
 
@@ -40,3 +41,10 @@ def un_gzip_tar_file(in_file, destination_folder=None):
     destination_folder = os.path.dirname(in_file) if destination_folder is None else destination_folder    
     tfile = tarfile.open(in_file, 'r:gz')
     tfile.extractall(destination_folder)
+    
+def un_zip_file(in_file, destination_folder=None):
+    """ Extract content from in_file and save it in destination folder (or . if None is passed)"""    
+    destination_folder = os.path.dirname(in_file) if destination_folder is None else destination_folder    
+    zip_ref = zipfile.ZipFile(in_file, 'r')
+    zip_ref.extractall(destination_folder)
+    zip_ref.close()
