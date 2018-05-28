@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Class to download IMDB and load train and test datasets.
+Class to download IMDB and load train and test sets.
 
 """
 
@@ -27,8 +27,7 @@ class Imdb:
         
         # File where the downloaded aclImdb_v1.tar.gz will be saved
         download_output = os.path.join(aclImdb_folder, 'aclImdb_v1.tar.gz')        
-        
-        
+                
         # Download file if the dataset isn't avaiblable in the dataset folder
         if not os.path.exists(aclImdb_folder) and not os.path.exists(download_output):        
             print(f'Downloading file to: {download_output}')
@@ -82,7 +81,9 @@ class Imdb:
         (train_x_bow, train_categories), (test_x_bow, test_categories) : tuple of tuples
             
         """
+        # If max_features is None, use the entire vocab used by IMDB
         max_features = 74849 if max_features is None else max_features
+        
         # Pickled numpy dataset file
         numpy_dataset_file = os.path.join(self.aclImdb_folder, os.path.pardir, f'imdb_bow_{max_features}.npy')
         
@@ -103,7 +104,7 @@ class Imdb:
             test_x_bow = cv.transform(test_texts)
             
             # Put together all dataset variables
-            data ={ 'train':(train_x_bow, train_categories), 'test':(test_x_bow, test_categories)}
+            data = { 'train':(train_x_bow, train_categories), 'test':(test_x_bow, test_categories)}
             
             # Save dataset to pickle file
             np.save(numpy_dataset_file, data)

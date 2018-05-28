@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Classify IMDB with Logistic Regression using ...
+Classify IMDB with Logistic Regression using using word embeddings (Bag of Features).
 
+# Accuracy: 
+    0.76628 (with 5k words)
+    0.80664 (with 50k words)
+    0.81732 (with 250k words)
+    0.81828 (with 500k words)
+    0.81892 (with entire vocab)
 """
 
 from sklearn.linear_model import LogisticRegression
@@ -15,31 +21,31 @@ from models.embeddings import Embedding
 
 
 # Load dataset
-print('Loading dataset...')
+print('Loading dataset...', flush=True)
 imdb = Imdb(config.DATASETS_FOLDER)
 (train_x_texts, train_y), (test_x_texts, test_y) = imdb.get_texts_and_categories()
 
 
-print('Loading Embeddings...')
-NUM_WORDS = 5000
+print('Loading Embeddings...', flush=True)
+NUM_WORDS = None
 embeddings = Embedding(max_words = NUM_WORDS)
 
 
 train_x_bof = embeddings.getTextAsBoF(train_x_texts)
-print(train_x_bof.shape) 
+print(train_x_bof.shape, flush=True) 
 
 test_x_bof = embeddings.getTextAsBoF(test_x_texts)
-print(test_x_bof.shape)
+print(test_x_bof.shape, flush=True)
 
 # Train LR model
-print('Training model...')
+print('Training model...', flush=True)
 lm = LogisticRegression()
 lm.fit(train_x_bof, train_y)
 
 # Predict and score on test set
 ps = lm.predict(test_x_bof)
 acc = accuracy_score(test_y, ps)
-print(f'Accuracy: {acc}')
+print(f'Accuracy: {acc}', flush=True)
 
 
 

@@ -3,11 +3,12 @@
 Classify IMDB with Neural Network using BoW. 
 
 # Accuracy
-  A simples NN can achieve easily above 0.88 
+  A simple two layer NN can achieve easily above 0.88 
   
 # Comments
-  In all my experiments adding dropout makes test accuracy lower.
-  If I train with dropout, training for one more epoch without it increases accuracy.
+ * In all my experiments adding dropout makes test accuracy lower.
+ * If I train with dropout, after finishing training, if I train for one more 
+ epoch without it, the accuracy increases.
 
 """
 

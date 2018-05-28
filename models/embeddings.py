@@ -13,7 +13,9 @@ from util import download_file, un_zip_file
 
 class Embedding:
     
-    def __init__(self, embedding='fasttext_wiki_news_300d_1M', max_words=5000):
+    VOCAB_SIZE = 999995
+    
+    def __init__(self, embedding='fasttext_wiki_news_300d_1M', max_words=None):
         """ Instantiate a word embedding.
         
         Parameters
@@ -25,8 +27,11 @@ class Embedding:
             A string specifying which word embeding to load (possible values:
             `fasttext_wiki_news_300d_1M`).
         """
-        # Store the
-        self.max_words = max_words
+        if not max_words is None:            
+            assert(max_words <= self.VOCAB_SIZE)
+        else:
+            max_words = self.VOCAB_SIZE
+        self._max_words = max_words
         
         # Load corret emebddings acordingly to the parameters
         if embedding == 'fasttext_wiki_news_300d_1M':
@@ -81,7 +86,7 @@ class Embedding:
         with open(self.emebed_file, encoding='utf8') as f:    
             
             # For i rangin from 0 to the num_words that will be loaded
-            for i in range(0, self.max_words):
+            for i in range(0, self._max_words):
                 
                 # Extract word : embedding values from line and store in the dict              
                 line = next(f)
