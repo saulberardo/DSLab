@@ -17,25 +17,12 @@ import config
 from datasets.imdb import Imdb
 
 
-from models.embeddings import Embedding
-
 
 # Load dataset
 print('Loading dataset...', flush=True)
 imdb = Imdb(config.DATASETS_FOLDER)
-(train_x_texts, train_y), (test_x_texts, test_y) = imdb.get_texts_and_categories()
+(train_x_bof, train_y), (test_x_bof, test_y) = imdb.get_bof_fasttext_wiki_news_300d_1M()
 
-
-print('Loading Embeddings...', flush=True)
-NUM_WORDS = None
-embeddings = Embedding(max_words = NUM_WORDS)
-
-
-train_x_bof = embeddings.getTextAsBoF(train_x_texts)
-print(train_x_bof.shape, flush=True) 
-
-test_x_bof = embeddings.getTextAsBoF(test_x_texts)
-print(test_x_bof.shape, flush=True)
 
 # Train LR model
 print('Training model...', flush=True)

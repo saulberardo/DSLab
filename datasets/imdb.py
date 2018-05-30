@@ -2,6 +2,7 @@
 """
 Class to download IMDB and load train and test sets.
 
+TODO: remove datasets_folder from constructor.
 """
 
 import os
@@ -10,7 +11,10 @@ import re
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 
+import config
 from util import download_file, un_gzip_tar_file
+from models.embeddings import Embedding
+
 
 
 class Imdb:
@@ -114,6 +118,49 @@ class Imdb:
                         
         return data['train'], data['test']
         
-             
+    
+    def get_bof_fasttext_wiki_news_300d_1M(self):
+        """ Convert texts to BoF (Baf of Features) using FastText Wiki News 300d 
+        embeddings and return dataset.         
+            
+        Returns
+        -------
+        (train_x_bow, train_categories), (test_x_bow, test_categories) : tuple of tuples
+        """        
+        # Pickled numpy dataset file
+        numpy_dataset_file = os.path.join(self.aclImdb_folder, os.path.pardir, f'fasttext_wiki_news_300d_1M.npy')
+        
+        # Verify if the dataset already exists
+        if os.path.exists(numpy_dataset_file):
+            
+            # Load pickled data
+            data = np.load(numpy_dataset_file).item()
+
+        # If the dataset doesn't exist yet                        
+        else:        
+            
+            # Get original data
+            (train_x_texts, train_y), (test_x_texts, test_y) = self.get_texts_and_categories()
+            
+            # Load emebddings
+            print('Loading Embeddings...', flush=True)        
+            embeddings = Embedding()
+            
+            # Convert texts to BoF
+            print('Converting texts to BoF...', flush=True)  
+            train_x_bof = embeddings.getTextAsBoF(train_x_texts)
+            print(train_x_bof.shape, flush=True)             
+            test_x_bof = embeddings.getTextAsBoF(test_x_texts)
+            print(test_x_bof.shape, flush=True)
+                        
+            # Put together all dataset variables
+            data = { 'train':(train_x_bof, train_y), 'test':(test_x_bof, test_y)}
+            
+            # Save dataset to pickle file
+            np.save(numpy_dataset_file, data)
+        
+        
+        return data['train'], data['test']
+                
 
     
